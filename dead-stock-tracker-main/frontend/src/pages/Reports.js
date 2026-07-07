@@ -75,7 +75,9 @@ function Reports() {
                 </div>
                 <div className="bg-purple-50 p-4 rounded">
                   <p className="text-gray-600">Total Value</p>
-                  <p className="text-3xl font-bold text-purple-600">${reports[activeReport].total_value?.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-purple-600">
+  ${Number(reports[activeReport].total_value || 0).toFixed(2)}
+</p>
                 </div>
               </div>
 
@@ -96,7 +98,7 @@ function Reports() {
                         <td className="px-4 py-2">{item.sku}</td>
                         <td className="px-4 py-2">{item.name}</td>
                         <td className="px-4 py-2">{item.quantity}</td>
-                        <td className="px-4 py-2">${item.total_value?.toFixed(2)}</td>
+                        <td className="px-4 py-2">${Number(item.total_value || 0).toFixed(2)}</td>
                         <td className="px-4 py-2">{item.days_without_sale}</td>
                       </tr>
                     ))}

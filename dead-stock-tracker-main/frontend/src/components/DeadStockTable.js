@@ -31,7 +31,7 @@ function DeadStockTable({ items }) {
                   <td className="px-6 py-3">{item.name}</td>
                   <td className="px-6 py-3">{item.category}</td>
                   <td className="px-6 py-3">{item.quantity}</td>
-                  <td className="px-6 py-3">${item.cost.toFixed(2)}</td>
+                  <td className="px-6 py-3">${Number(item.cost || 0).toFixed(2)}</td>
                   <td className="px-6 py-3 font-semibold text-red-600">${totalValue.toFixed(2)}</td>
                   <td className="px-6 py-3">
                     {lastSaleDate ? lastSaleDate.toLocaleDateString() : 'Never'}

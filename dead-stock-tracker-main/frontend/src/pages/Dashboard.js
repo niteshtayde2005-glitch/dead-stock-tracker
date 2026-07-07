@@ -53,7 +53,7 @@ function Dashboard() {
             />
             <StatCard
               title="Total Value"
-              value={`$${(data.summary?.total_value || 0).toFixed(2)}`}
+              value={`$${Number(data.summary?.total_value || 0).toFixed(2)}`}
               icon="💰"
               color="purple"
             />
@@ -71,7 +71,7 @@ function Dashboard() {
               {data.topCategories?.map((cat, idx) => (
                 <div key={idx} className="flex justify-between items-center pb-4 border-b">
                   <span className="text-gray-700 font-semibold">{cat.category}</span>
-                  <span className="text-gray-600">${(cat.value || 0).toFixed(2)}</span>
+                  <span className="text-gray-600">${Number(cat.value || 0).toFixed(2)}</span>
                 </div>
               ))}
             </div>
