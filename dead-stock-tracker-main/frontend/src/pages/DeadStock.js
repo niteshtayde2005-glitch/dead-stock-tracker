@@ -8,6 +8,9 @@ function DeadStock() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [riskFilter, setRiskFilter] = useState("All"); 
+
   useEffect(() => {
     fetchDeadStock();
   }, []);
@@ -27,6 +30,32 @@ function DeadStock() {
   if (loading) return <LoadingSpinner />;
 
   const totalValue = deadStockItems.reduce((sum, item) => sum + (item.quantity * item.cost), 0);
+  const filteredItems = deadStockItems.filter((item) => {
+  const matchesSearch =
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.category?.toLowerCase().includes(searchTerm.toLowerCase());
+
+  const daysWithoutSale = item.last_sale_date
+    ? Math.floor(
+        (new Date() - new Date(item.last_sale_date)) /
+          (1000 * 60 * 60 * 24)
+      )
+    : 9999;
+
+  let risk = "Low";
+
+  if (daysWithoutSale > 365) {
+    risk = "High";
+  } else if (daysWithoutSale > 180) {
+    risk = "Medium";
+  }
+
+  const matchesRisk =
+    riskFilter === "All" || risk === riskFilter;
+
+  return matchesSearch && matchesRisk;
+});
 
   return (
     <div className="p-8">
@@ -38,6 +67,32 @@ function DeadStock() {
           {error}
         </div>
       )}
+      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <input
+      type="text"
+      placeholder="🔍 Search dead stock..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+    />
+
+    <select
+      value={riskFilter}
+      onChange={(e) => setRiskFilter(e.target.value)}
+      className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+    >
+      <option>All</option>
+      <option>High</option>
+      <option>Medium</option>
+      <option>Low</option>
+    </select>
+
+  </div>
+
+</div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
@@ -56,7 +111,7 @@ function DeadStock() {
         </div>
       </div>
 
-      <DeadStockTable items={deadStockItems} />
+      <DeadStockTable items={filteredItems} />
     </div>
   );
 }

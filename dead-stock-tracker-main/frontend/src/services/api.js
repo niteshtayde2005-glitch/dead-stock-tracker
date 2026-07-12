@@ -48,6 +48,11 @@ export const reportService = {
   getDeadStockReport: () => api.get('/reports/dead-stock'),
   getCategoryReport: () => api.get('/reports/category'),
   getValueReport: () => api.get('/reports/value'),
+
+  exportExcel: () =>
+    api.get('/reports/export-excel', {
+      responseType: 'blob',
+    }),
 };
 
 export default api;
